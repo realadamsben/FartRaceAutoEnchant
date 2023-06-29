@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'io.github.file5.guidesigner' version '1.0.2'
+}
+
+group = 'im.adams'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+
+    maven { url 'https://jitpack.io' }
+}
+
+
+dependencies {
+
+// https://mvnrepository.com/artifact/com.1stleg/jnativehook
+
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    implementation 'club.minnced:discord-webhooks:0.8.2'
+
+    implementation 'com.google.code.gson:gson:2.10.0'
+    implementation 'com.1stleg:jnativehook:2.1.0'
+
+    implementation "com.jetbrains.intellij.java:java-gui-forms-rt:+"
+    //noinspection GradlePackageUpdate
+    implementation "com.jgoodies:forms:1.1-preview"
+
+    implementation 'com.github.nguyenq:tess4j:tess4j-5.7.0'
+
+
+}
+
+test {
+    useJUnitPlatform()
+}
+
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    manifest {
+        attributes ('Main-Class': 'im.adams.MainFrame', 'Implementation-Version': version)
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+}
