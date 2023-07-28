@@ -1,4 +1,4 @@
-package im.adams;
+package im.adams.frae;
 
 public class Config {
 

@@ -1,4 +1,4 @@
-package im.adams;
+package im.adams.frae;
 
 import com.google.gson.Gson;
 import net.sourceforge.tess4j.util.LoadLibs;
@@ -139,26 +139,27 @@ public class MainFrame extends JFrame implements ActionListener, NativeKeyListen
         }
     }
 
-    public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException, NativeHookException, FileNotFoundException {
-
-        initConfig();
-
-
-        File tmpFolder = LoadLibs.extractTessResources("win32-x86-64");
-        System.setProperty("java.library.path", tmpFolder.getPath());
-
-        UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-
-        frame = new JFrame("FRAE 1.0 - Not running!");
-        frame.setContentPane(new MainFrame().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setAlwaysOnTop(true);
-        frame.pack();
-        frame.setVisible(true);
+    public static void main(String[] args){
+        try{
+            initConfig();
 
 
+            File tmpFolder = LoadLibs.extractTessResources("win32-x86-64");
+            System.setProperty("java.library.path", tmpFolder.getPath());
 
+            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
 
+            frame = new JFrame("FRAE 1.0 - Not running!");
+            frame.setContentPane(new MainFrame().mainPanel);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setAlwaysOnTop(true);
+            frame.pack();
+            frame.setVisible(true);
+
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(null, "There was an error!\n" + e.toString());
+            throw new RuntimeException();
+        }
     }
 
     @Override

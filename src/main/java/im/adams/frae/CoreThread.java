@@ -1,4 +1,4 @@
-package im.adams;
+package im.adams.frae;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.send.WebhookMessage;
@@ -6,21 +6,14 @@ import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static im.adams.MainFrame.config;
-import static im.adams.MainFrame.run;
+import static im.adams.frae.MainFrame.config;
+import static im.adams.frae.MainFrame.run;
 
 
 public class CoreThread extends Thread {
@@ -59,7 +52,16 @@ public class CoreThread extends Thread {
            } catch (Exception e) {
                e.printStackTrace();
            }
-           BufferedImage screenCapture = robot.createScreenCapture(new Rectangle(config.xPosTopLeft, config.yPosTopLeft, config.xPosBottomRight-config.xPosTopLeft, config.yPosBottomRight-config.yPosTopLeft));
+           BufferedImage screenCapture;
+           try {
+               screenCapture = robot.createScreenCapture(new Rectangle(config.xPosTopLeft, config.yPosTopLeft, config.xPosBottomRight-config.xPosTopLeft, config.yPosBottomRight-config.yPosTopLeft));
+           } catch (Exception e){
+               JOptionPane.showMessageDialog(new JFrame(), "There was an error!\n " + e.toString());
+               MainFrame.run = false;
+               MainFrame.frame.setTitle("FRAE 1.0 - Not running!");
+               return;
+           }
+
 
            System.out.printf("Width: %s\n", config.xPosBottomRight - config.xPosTopLeft);
            System.out.printf("Height: %s\n", config.yPosBottomRight - config.yPosTopLeft);
@@ -88,6 +90,7 @@ public class CoreThread extends Thread {
            });
            if (strengths.get() >= config.targetNum) {
                MainFrame.run = false;
+               MainFrame.frame.setTitle("FRAE 1.0 - Not running!");
                try {
                    WebhookClient webhookClient = WebhookClient.withUrl(config.webhookURI);
                    WebhookMessage webhookMessage = new WebhookMessageBuilder()
@@ -98,6 +101,7 @@ public class CoreThread extends Thread {
                    webhookClient.close();
                } catch (Exception e) {
                }
+
 
                JOptionPane.showConfirmDialog(null, "Found pet with " + strengths + " strengths, target was " + config.targetNum);
 
